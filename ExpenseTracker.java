@@ -9,7 +9,7 @@ public class ExpenseTracker {
 
     public static void main(String[] args) {
         
-        // Set Defaults but you can create custom categories naman
+        // Set Defaults but you can create custom categories 
         categories.add("Food");
         categories.add("Transportation");
         categories.add("Entertainment");
@@ -248,8 +248,7 @@ public class ExpenseTracker {
         String categoryInput = sc.nextLine();
         String category = null;
         
-        //this whole thing is from AI, for custom categories
-        // memo : I AM NOT USING AI AS MUCH I PROMISE
+        //this is for custom categories
         if (!categoryInput.isEmpty()) {
             try {
                 int categoryChoice = Integer.parseInt(categoryInput);
