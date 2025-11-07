@@ -178,9 +178,12 @@ public class ExpenseTracker {
     }
     
     /**
-     * Guides the user through setting a new budget with amount, date range, and optional category.
-     * Creates a Budget object and adds it to the budgets collection.
-     * Displays a summary of the created budget.
+     * Guides the user through setting a new budget with comprehensive parameters.
+     * Collects budget amount, start and end dates, and optional category. Generates a unique
+     * budget ID and creates a Budget object that is added to the budgets collection.
+     * Displays a summary of the created budget including all specified parameters.
+     * 
+     * @param sc the Scanner object used to read user input throughout the budget setting process
      */
     public static void setBudget(Scanner sc) {
 
@@ -241,10 +244,13 @@ public class ExpenseTracker {
     }
 
     /**
-     * Guides the user through recording a new expense.
-     * Supports both cash and digital expenses with bank transaction details.
-     * Creates an Expense object and adds it to the expenses collection.
-     * Displays a summary of the recorded expense.
+     * Guides the user through recording a new expense with detailed transaction information.
+     * Supports both cash expenses and digital transactions with bank details. Collects amount, date,
+     * optional bank information (name, account numbers, reference number), and category. Creates
+     * an appropriate Expense object (cash or digital) and adds it to the expenses collection.
+     * Displays a comprehensive summary of the recorded expense.
+     * 
+     * @param sc the Scanner object used to read user input throughout the expense recording process
      */
     public static void recordExpense(Scanner sc) {
 
@@ -628,10 +634,12 @@ public class ExpenseTracker {
     }
 
     /**
-     * Prompts the user to enter date and time information and returns a DateTime object.
+     * Prompts the user to enter date and time information and creates a DateTime object.
+     * Collects year, month, day, hour, and minute inputs from the user to construct a complete timestamp.
      * 
-     * @param s a string to customize the prompt (e.g., "Start", "End", or empty)
-     * @return a DateTime object constructed from user input
+     * @param sc the Scanner object used to read user input
+     * @param s a descriptive string used in prompts (e.g., "Start", "End", or empty for general date)
+     * @return a DateTime object constructed from the user-provided date and time components
      */
     public static DateTime getDate(Scanner sc, String s){
 
@@ -654,10 +662,12 @@ public class ExpenseTracker {
     }
 
     /**
-     * Prompts the user to select or create an expense category.
-     * Users can choose from existing categories, create a new one, or skip categorization.
+     * Prompts the user to select an expense category from available options or create a new one.
+     * Users can choose from the predefined categories by number, type a new category name to create it,
+     * or press ENTER to skip categorization. New categories are automatically added to the available categories list.
      * 
-     * @return the selected or created category name, or null if no category was selected
+     * @param sc the Scanner object used to read user input
+     * @return the selected category name as a String, or null if no category was selected
      */
     public static String getCategory(Scanner sc){
 
