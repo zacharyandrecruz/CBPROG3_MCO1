@@ -11,7 +11,7 @@ public class Expense {
     
     //Constructor with bank details and category (digital expense with category)
     
-    public Expense(String bankName, String bankAccNum, float amount, String currency, 
+    public Expense(String expenseID, String bankName, String bankAccNum, float amount, String currency, 
                   String refNum, String receiverAccNo, DateTime dateTime, String category) {
         this.expenseBank = new Bank(bankName, bankAccNum);
         this.expenseAmount = amount;
@@ -25,14 +25,14 @@ public class Expense {
     
     //Constructor with bank details but without category 
      
-    public Expense(String bankName, String bankAccNum, float amount, String currency, 
+    public Expense(String expenseID, String bankName, String bankAccNum, float amount, String currency, 
                   String refNum, String receiverAccNo, DateTime dateTime) {
-        this(bankName, bankAccNum, amount, currency, refNum, receiverAccNo, dateTime, null);
+        this(expenseID, bankName, bankAccNum, amount, currency, refNum, receiverAccNo, dateTime, null);
     }
     
     //Constructor without bank details but with category 
     
-    public Expense(float amount, String currency, DateTime dateTime, String category) {
+    public Expense(String expenseID, float amount, String currency, DateTime dateTime, String category) {
         this.expenseAmount = amount;
         this.expenseCurrency = currency;
         this.expenseDateTime = dateTime;
@@ -44,8 +44,8 @@ public class Expense {
     
     //Constructor without bank details and without category 
     
-    public Expense(float amount, String currency, DateTime dateTime) {
-        this(amount, currency, dateTime, null);
+    public Expense(String expenseID, float amount, String currency, DateTime dateTime) {
+        this(expenseID, amount, currency, dateTime, null);
     }
     
     // Getters

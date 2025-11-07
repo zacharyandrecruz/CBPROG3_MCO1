@@ -9,11 +9,13 @@ public class User {
     private String userPassword;
     private ArrayList<Bank> userBanks;
     
-    public User(String email, String fName, String mName, String sName) {
+    public User(String userID, String email, String fName, String mName, String sName) {
+        this.userID = userID;
         this.userEmail = email;
         this.firstName = fName;
         this.midName = mName;
         this.surname = sName;
+        this.userPassword = null;
         this.userBanks = new ArrayList<>(); //for storing banks at addBank
     }
     
@@ -39,11 +41,20 @@ public class User {
     
     public boolean setUserPassword(String pw) {
 
-        if (pw != null && pw.length() >= 6) { //if the char length is lower than 6, return false
-            this.userPassword = pw;
-            return true;
+        if(this.userPassword != null){
+            if (pw != this.userPassword && pw.length() >= 6) { //if the char length is lower than 6 and password is not equal to previous password, return false
+                this.userPassword = pw;
+                return true;
+            }
+        }else{
+            if(pw.length() >= 6){
+                this.userPassword = pw;
+                return true;
+            }
         }
+
         return false; 
+        
     }
     
     public void addBank(String bankName, String bankAccNum) {

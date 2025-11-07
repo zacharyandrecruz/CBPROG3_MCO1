@@ -6,14 +6,16 @@ public class Budget {
     private String budgetCategory;
     
     
-    public Budget(float amount, DateTime start, DateTime end, String category) {
+    public Budget(String budgetID, float amount, DateTime start, DateTime end, String category) {
+        this.budgetID = budgetID;
         this.budgetAmt = amount;
         this.budgetStart = start;
         this.budgetEnd = end;
         this.budgetCategory = category;
     }
     
-    public Budget(float amount, DateTime start, DateTime end) {
+    public Budget(String budgetID, float amount, DateTime start, DateTime end) {
+        this.budgetID = budgetID;
         this.budgetAmt = amount;
         this.budgetStart = start;
         this.budgetEnd = end;
@@ -21,8 +23,12 @@ public class Budget {
     }
     
     // Getters
+    public String getBudgetID(){
+        return this.budgetID;
+    }
+
     public float getBudgetAmt() {
-        return budgetAmt;
+        return this.budgetAmt;
     }
     
     public void setBudgetAmt(float amount) {
@@ -30,19 +36,19 @@ public class Budget {
     }
     
     public DateTime getBudgetStart() {
-        return budgetStart;
+        return this.budgetStart;
     }
     
     public DateTime getBudgetEnd() {
-        return budgetEnd;
+        return this.budgetEnd;
     }
     
     public String getBudgetCategory() {
-        return budgetCategory;
+        return this.budgetCategory;
     }
     
     // Helper
     public boolean hasCategory() {
-        return budgetCategory != null && !budgetCategory.isEmpty();
+        return this.budgetCategory != null && !budgetCategory.isEmpty();
     }
 }
