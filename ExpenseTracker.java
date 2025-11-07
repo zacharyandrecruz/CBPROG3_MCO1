@@ -1,3 +1,25 @@
+/**
+ * The ExpenseTracker class provides a comprehensive system for managing personal finances.
+ * It allows users to set budgets, record expenses, track spending by category, 
+ * and analyze expenses over daily, weekly, and monthly periods.
+ * 
+ * <p>Key features include:
+ * <ul>
+ *   <li>User authentication</li>
+ *   <li>Budget setting with date ranges and categories</li>
+ *   <li>Expense recording with optional digital transaction details</li>
+ *   <li>Custom category management</li>
+ *   <li>Daily, monthly, and categorical expense tracking and analysis</li>
+ *   <li>Expense percentage breakdown by category</li>
+ * </ul>
+ * 
+ * <p>The system maintains separate collections for budgets, expenses, and categories,
+ * and provides various utility methods for financial analysis.
+ * 
+ * @author Your Name
+ * @version 1.0
+ * @since 2025
+ */
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,6 +29,13 @@ public class ExpenseTracker {
     private static ArrayList<String> categories = new ArrayList<>();
     private static User user;
 
+    /**
+     * Main file for the ExpenseTracker application.
+     * Initializes default categories and sample expenses, then demonstrates
+     * various expense analysis functionalities.
+     * 
+     * @param args command line arguments 
+     */
     public static void main(String[] args) {
         
         // Set Defaults but you can create custom categories 
@@ -37,6 +66,13 @@ public class ExpenseTracker {
 
     }
     
+    /**
+     * Authenticates a user with the provided email and password.
+     * 
+     * @param email the user's email address
+     * @param password the user's password
+     * @return true if authentication is successful, false otherwise
+     */
     public static boolean login(String email, String password) {
         if (user != null && 
             user.getUserEmail().equals(email) && 
@@ -46,6 +82,11 @@ public class ExpenseTracker {
         return false; 
     }
     
+    /**
+     * Guides the user through setting a new budget with amount, date range, and optional category.
+     * Creates a Budget object and adds it to the budgets collection.
+     * Displays a summary of the created budget.
+     */
     public static void setBudget() {
 
         Scanner sc = new Scanner(System.in);
@@ -94,6 +135,12 @@ public class ExpenseTracker {
 
     }
     
+    /**
+     * Retrieves a budget at the specified index.
+     * 
+     * @param index the index of the budget to retrieve
+     * @return the Budget object at the specified index, or null if index is invalid
+     */
     public static Budget getBudget(int index) {
         if (!budgets.isEmpty()) {
             return budgets.get(index); // Return most recent budget
@@ -101,6 +148,12 @@ public class ExpenseTracker {
         return null;
     }
 
+    /**
+     * Guides the user through recording a new expense.
+     * Supports both cash and digital expenses with bank transaction details.
+     * Creates an Expense object and adds it to the expenses collection.
+     * Displays a summary of the recorded expense.
+     */
     public static void recordExpense() {
         
         Scanner sc = new Scanner(System.in);
@@ -184,6 +237,11 @@ public class ExpenseTracker {
 
     }
 
+    /**
+     * Calculates the daily average of expenses.
+     * 
+     * @return the average daily expense amount as a float
+     */
     public static float computeDailyAve() {
         
         float dailyAverage = 0;
@@ -204,6 +262,11 @@ public class ExpenseTracker {
 
     }
     
+    /**
+     * Calculates the monthly average of expenses.
+     * 
+     * @return the average monthly expense amount as a float
+     */
     public static float computeMonthlyAverage() {
         
         float monthlyAverage = 0;
@@ -224,6 +287,10 @@ public class ExpenseTracker {
         
     }
 
+    /**
+     * Displays all monthly expenses with their totals and calculates the monthly average.
+     * Groups expenses by month and year, showing the total for each month.
+     */
     public static void viewMonthlyExpense() {
         
         System.out.println("Viewing Monthly Expenses");
@@ -263,6 +330,10 @@ public class ExpenseTracker {
 
     }
     
+    /**
+     * Displays all daily expenses with their totals and calculates the daily average.
+     * Groups expenses by date, showing the total for each day.
+     */
     public static void viewDailyExpense() {
         
         System.out.println("Viewing Daily Expenses");
@@ -300,6 +371,12 @@ public class ExpenseTracker {
 
     }
 
+    /**
+     * Displays expenses filtered by category and calculates the total for that category.
+     * If category is null, displays all uncategorized expenses.
+     * 
+     * @param category the category to filter by, or null for uncategorized expenses
+     */
     public static void viewTotalCategoryExpense(String category) {
         
         int counter = 0;
@@ -363,6 +440,10 @@ public class ExpenseTracker {
 
     }
     
+    /**
+     * Displays all expenses recorded in the system with their individual details
+     * and calculates the grand total of all expenses.
+     */
     public static void viewTotalExpense() {
         
         int counter = 0;
@@ -389,6 +470,11 @@ public class ExpenseTracker {
 
     }
     
+    /**
+     * Displays a percentage breakdown of expenses by category.
+     * Shows each category's total expense and its percentage of the overall spending,
+     * including uncategorized expenses.
+     */
     public static void viewCategoryExpensePercentage() {
         
         ArrayList<Float> totalExpenses = new ArrayList<>();
@@ -416,6 +502,14 @@ public class ExpenseTracker {
 
     //Helper Functions;
 
+    /**
+     * Generates a unique ID with the specified prefix and numerical component.
+     * 
+     * @param prefix the string prefix for the ID (e.g., "BUDG", "EXPN")
+     * @param idNum the numerical component of the ID
+     * @param numOfDigits the total number of digits for the numerical part (including leading zeros)
+     * @return the generated ID string
+     */
     public static String generateID(String prefix, int idNum, int numOfDigits){
 
         String id = "";
@@ -434,6 +528,9 @@ public class ExpenseTracker {
 
     }
 
+    /**
+     * Displays all available expense categories to the user.
+     */
     public static void displayCategories(){
         System.out.println("\nAvailable Categories:");
         for (int i = 0; i < categories.size(); i++) {
@@ -441,6 +538,12 @@ public class ExpenseTracker {
         }
     }
 
+    /**
+     * Prompts the user to enter date and time information and returns a DateTime object.
+     * 
+     * @param s a string to customize the prompt (e.g., "Start", "End", or empty)
+     * @return a DateTime object constructed from user input
+     */
     public static DateTime getDate(String s){
 
         Scanner sc = new Scanner(System.in);
@@ -465,6 +568,12 @@ public class ExpenseTracker {
 
     }
 
+    /**
+     * Prompts the user to select or create an expense category.
+     * Users can choose from existing categories, create a new one, or skip categorization.
+     * 
+     * @return the selected or created category name, or null if no category was selected
+     */
     public static String getCategory(){
 
         Scanner sc = new Scanner(System.in);
@@ -497,7 +606,14 @@ public class ExpenseTracker {
 
     }
 
-    //First float will always be the total number of days detected;
+    /**
+     * Calculates total expenses for each day based on recorded expenses.
+     * Groups expenses by date and sums amounts for each unique date.
+     * The first element in the returned list is the total number of days.
+     * 
+     * @return an ArrayList of Float values where the first element is the number of days,
+     *         followed by total expenses for each day
+     */
     public static ArrayList<Float> getDailyExpenses(){
 
         ArrayList<Float> expensePerDay = new ArrayList<>();
@@ -529,6 +645,14 @@ public class ExpenseTracker {
 
     }
 
+    /**
+     * Calculates total expenses for each month based on recorded expenses.
+     * Groups expenses by month and year, summing amounts for each unique month.
+     * The first element in the returned list is the total number of months.
+     * 
+     * @return an ArrayList of Float values where the first element is the number of months,
+     *         followed by total expenses for each month
+     */
     public static ArrayList<Float> getMonthlyExpenses(){
         
         ArrayList<Float> expensePerMonth = new ArrayList<>();
@@ -562,6 +686,12 @@ public class ExpenseTracker {
 
     }
 
+    /**
+     * Calculates the total expense amount for a specific category.
+     * 
+     * @param category the category to calculate total for, or null for uncategorized expenses
+     * @return the total expense amount for the specified category as a float
+     */
     public static float getTotalCategoryExpense(String category) {
         
         float totalExpense = 0;
@@ -600,6 +730,11 @@ public class ExpenseTracker {
 
     }
 
+    /**
+     * Calculates the total of all expenses recorded in the system.
+     * 
+     * @return the grand total of all expenses as a float
+     */
     public static float getTotalExpenses(){
         
         float totalExpense = 0;
