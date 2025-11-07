@@ -21,6 +21,7 @@
  * @since 2025
  */
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ExpenseTracker {
@@ -54,15 +55,109 @@ public class ExpenseTracker {
         expenses.add(new Expense("4", 50, "PHP", new DateTime("2025", "12", "3", "12", "00"), "Food"));
         expenses.add(new Expense("5", 100, "PHP", new DateTime("2025", "12", "3", "12", "00"), "Food"));
 
-        viewMonthlyExpense();
-        System.out.println("");
-        viewDailyExpense();
-        System.out.println("");
-        viewTotalCategoryExpense(null);
-        System.out.println("");
-        viewTotalExpense();
-        System.out.println("");
-        viewCategoryExpensePercentage();
+        boolean running = true;
+        Scanner sc = new Scanner(System.in);
+        int choice = 0;
+
+        while(running){
+
+            System.out.println("\nMain Menu\n=========");
+            System.out.println("\n[1] Set Budget\n[2] Record Expense\n[3] View Monthly Expenses\n[4] View Daily Expenses\n[5] View Total Expenses By Category\n[6] View Total Expenses\n[7] View Total Expenses By Percentage\n[8] Exit Program\n");
+            System.out.print("Please input the number of your selected option: ");
+
+            try{
+                choice = sc.nextInt();
+                sc.nextLine();
+                System.out.println("");
+            }catch (InputMismatchException e){
+                System.err.print("\nError! Please input a valid number: ");
+                choice = 0;
+            }
+
+            switch(choice){
+
+                case 1 : 
+
+                setBudget();
+                choice = 0;
+
+                break;
+
+                case 2 : 
+
+                recordExpense();
+                choice = 0;
+
+                break;
+
+                case 3 : 
+
+                viewMonthlyExpense();
+                choice = 0;
+
+                break;
+
+                case 4 : 
+
+                viewDailyExpense();
+                choice = 0;
+
+                break;
+
+                case 5 : 
+
+                String categoryChoice = null;
+
+                System.err.println("Please enter the name of the category you'd like to view (Press enter for Non-Categorized): ");
+                categoryChoice = sc.nextLine();
+
+                if(categories.contains(categoryChoice)){
+                    viewTotalCategoryExpense(categoryChoice);
+                }else if(categoryChoice == null){
+                    viewTotalCategoryExpense(null);
+                }else{
+                    System.out.println("Error! No category of that name exists.");
+                }
+
+                choice = 0;
+
+                break;
+
+                case 6 : 
+
+                viewTotalExpense();
+                choice = 0;
+
+                break;
+
+                case 7 : 
+
+                viewCategoryExpensePercentage();
+                choice = 0;
+
+                break;
+
+                case 8 : 
+
+                System.out.println("Are you sure?\n[1] Yes\n[2] No");
+                System.out.print("Please input the number of your selected option: ");
+                choice = sc.nextInt();
+
+                if(choice == 1){
+                    running = false;
+                }else{
+                    choice = 0;
+                }
+
+                break;
+
+                default: //Nothing;
+
+            }
+
+        }
+
+        sc.close();
 
     }
     
