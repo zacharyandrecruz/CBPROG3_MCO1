@@ -78,14 +78,14 @@ public class ExpenseTracker {
 
                 case 1 : 
 
-                setBudget();
+                setBudget(sc);
                 choice = 0;
 
                 break;
 
                 case 2 : 
 
-                recordExpense();
+                recordExpense(sc);
                 choice = 0;
 
                 break;
@@ -113,7 +113,7 @@ public class ExpenseTracker {
 
                 if(categories.contains(categoryChoice)){
                     viewTotalCategoryExpense(categoryChoice);
-                }else if(categoryChoice == null){
+                }else if(categoryChoice == ""){
                     viewTotalCategoryExpense(null);
                 }else{
                     System.out.println("Error! No category of that name exists.");
@@ -151,7 +151,7 @@ public class ExpenseTracker {
 
                 break;
 
-                default: //Nothing;
+                default: choice = 0;
 
             }
 
@@ -182,9 +182,8 @@ public class ExpenseTracker {
      * Creates a Budget object and adds it to the budgets collection.
      * Displays a summary of the created budget.
      */
-    public static void setBudget() {
+    public static void setBudget(Scanner sc) {
 
-        Scanner sc = new Scanner(System.in);
         System.out.println("Set Budget");
         System.out.println("==========");
         
@@ -194,14 +193,14 @@ public class ExpenseTracker {
         sc.nextLine(); 
         
         // Ask for start date
-        DateTime startDate = getDate("Start");
+        DateTime startDate = getDate(sc, "Start");
         
         // Ask for end date
-        DateTime endDate = getDate("End");
+        DateTime endDate = getDate(sc, "End");
         
         // Ask for category
         displayCategories();
-        String category = getCategory();
+        String category = getCategory(sc);
         
         String budgetID = generateID("BUDG", budgets.size() + 1, 6);
 
@@ -226,8 +225,6 @@ public class ExpenseTracker {
             System.out.println("Category: " + category);
         }
 
-        sc.close();
-
     }
     
     /**
@@ -249,9 +246,8 @@ public class ExpenseTracker {
      * Creates an Expense object and adds it to the expenses collection.
      * Displays a summary of the recorded expense.
      */
-    public static void recordExpense() {
-        
-        Scanner sc = new Scanner(System.in);
+    public static void recordExpense(Scanner sc) {
+
         System.out.println("Record Expense");
         System.out.println("==========");
         
@@ -261,8 +257,8 @@ public class ExpenseTracker {
         sc.nextLine(); 
         
         // Ask for date
-        DateTime expenseDate = getDate("");
-        
+        DateTime expenseDate = getDate(sc, "");
+
         System.out.print("Enter the name of the bank the expense was recorded in (Press enter for none): ");
         String bankName = ""; 
         bankName = sc.nextLine();
@@ -283,7 +279,7 @@ public class ExpenseTracker {
 
         // Ask for category
         displayCategories();
-        String category = getCategory();
+        String category = getCategory(sc);
         
         String expenseID = generateID("EXPN", expenses.size() + 1, 6);
 
@@ -327,8 +323,6 @@ public class ExpenseTracker {
             System.out.println("Reference Number: " + refNum);
             System.out.println("Reciever's Account Number" + recAccNum);
         }
-
-        sc.close();
 
     }
 
@@ -505,10 +499,10 @@ public class ExpenseTracker {
 
         }else{
 
-            for(Expense e : expenses){
+            System.out.println("Viewing  Expenses in the " + category + " Category");
+            System.out.println("==========");
 
-                System.out.println("Viewing  Expenses in the " + category + " Category");
-                System.out.println("==========");
+            for(Expense e : expenses){
 
                 if(e.getExpenseCategory() != null){
 
@@ -639,9 +633,7 @@ public class ExpenseTracker {
      * @param s a string to customize the prompt (e.g., "Start", "End", or empty)
      * @return a DateTime object constructed from user input
      */
-    public static DateTime getDate(String s){
-
-        Scanner sc = new Scanner(System.in);
+    public static DateTime getDate(Scanner sc, String s){
 
         System.out.println("\nEnter " + s + " Date:");
         System.out.print("Year: ");
@@ -657,8 +649,6 @@ public class ExpenseTracker {
         
         DateTime date = new DateTime(year, month, day, hour, minute);
 
-        sc.close();
-
         return date;
 
     }
@@ -669,9 +659,7 @@ public class ExpenseTracker {
      * 
      * @return the selected or created category name, or null if no category was selected
      */
-    public static String getCategory(){
-
-        Scanner sc = new Scanner(System.in);
+    public static String getCategory(Scanner sc){
 
         System.out.print("Choose a category (1-" + categories.size() + "), type a new category, or press ENTER to have no category: ");
         
@@ -694,8 +682,6 @@ public class ExpenseTracker {
                 }
             }
         }
-
-        sc.close();
 
         return category;
 
