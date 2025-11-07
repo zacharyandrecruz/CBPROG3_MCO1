@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class ExpenseTracker {
     private static ArrayList<Budget> budgets = new ArrayList<>();
     private static ArrayList<Expense> expenses = new ArrayList<>();
-    private static User user;
     private static ArrayList<String> categories = new ArrayList<>();
+    private static User user;
 
     public static void main(String[] args) {
         
@@ -21,12 +21,20 @@ public class ExpenseTracker {
         expenses.add(new Expense("0", 10, "PHP", new DateTime("2025", "11", "1", "12", "00")));
         expenses.add(new Expense("1", 20, "PHP", new DateTime("2025", "11", "2", "12", "00")));
         expenses.add(new Expense("2", 10, "PHP", new DateTime("2025", "11", "3", "12", "00")));
-        expenses.add(new Expense("3", 20, "PHP", new DateTime("2025", "11", "3", "12", "00")));
+        expenses.add(new Expense("3", 30, "PHP", new DateTime("2025", "12", "3", "12", "00")));
+        expenses.add(new Expense("4", 50, "PHP", new DateTime("2025", "12", "3", "12", "00"), "Food"));
+        expenses.add(new Expense("5", 100, "PHP", new DateTime("2025", "12", "3", "12", "00"), "Food"));
 
-        for(Float f : getDailyExpenses()){
-            System.out.println(f);
-        }
-        
+        viewMonthlyExpense();
+        System.out.println("");
+        viewDailyExpense();
+        System.out.println("");
+        viewTotalCategoryExpense(null);
+        System.out.println("");
+        viewTotalExpense();
+        System.out.println("");
+        viewCategoryExpensePercentage();
+
     }
     
     public static boolean login(String email, String password) {
@@ -86,9 +94,9 @@ public class ExpenseTracker {
 
     }
     
-    public static Budget getBudget() {
+    public static Budget getBudget(int index) {
         if (!budgets.isEmpty()) {
-            return budgets.get(budgets.size() - 1); // Return most recent budget
+            return budgets.get(index); // Return most recent budget
         }
         return null;
     }
@@ -178,13 +186,231 @@ public class ExpenseTracker {
 
     public static float computeDailyAve() {
         
-        float dailyAverage;
+        float dailyAverage = 0;
         ArrayList<Float> expensePerDay;
-        int numOfDays;
+        float numOfDays;
+
+        expensePerDay = getDailyExpenses();
+        numOfDays = expensePerDay.get(0);
+        expensePerDay.remove(0);
+
+        for(int i = 0; i < expensePerDay.size(); i++){
+            dailyAverage += expensePerDay.get(i);
+        }
+
+        dailyAverage = dailyAverage/numOfDays;
+
+        return dailyAverage;
+
+    }
+    
+    public static float computeMonthlyAverage() {
+        
+        float monthlyAverage = 0;
+        ArrayList<Float> expensePerMonth;
+        float numOfMonths;
+
+        expensePerMonth = getMonthlyExpenses();
+        numOfMonths = expensePerMonth.get(0);
+        expensePerMonth.remove(0);
+
+        for(int i = 0; i < expensePerMonth.size(); i++){
+            monthlyAverage += expensePerMonth.get(i);
+        }
+
+        monthlyAverage = monthlyAverage/numOfMonths;
+
+        return monthlyAverage;
+        
+    }
+
+    public static void viewMonthlyExpense() {
+        
+        System.out.println("Viewing Monthly Expenses");
+        System.out.println("==========");
+
+        int totalMonths = 0;
+        float currentTotal = -1;
+        String currentMonth = "";
+        String currentYear = "";
+        String currency = "";
+        for(Expense e : expenses){
+            
+            if(!e.getExpenseDateTime().getMonth().equals(currentMonth) || !e.getExpenseDateTime().getYear().equals(currentYear)){
+                if(currentTotal != -1){
+                    System.out.println(Integer.toString(totalMonths) + ". " + currentMonth + " / " + currentYear + " - " + currentTotal + " " + e.getExpenseCurrency());
+                }
+                currentMonth = e.getExpenseDateTime().getMonth();
+                currentYear = e.getExpenseDateTime().getYear();
+                currentTotal = 0;
+                currentTotal += e.getExpenseAmount();
+                totalMonths += 1;
+            }else{
+
+                currentTotal += e.getExpenseAmount();
+
+            }
+
+            if(currency.isEmpty()){
+                currency = e.getExpenseCurrency();
+            }
+
+        }
+
+        System.out.println(Integer.toString(totalMonths)  + ". " + currentMonth + " / " + currentYear + " - " + currentTotal + " " + currency);
+
+        System.out.println("Computed Monthly Average: " + computeMonthlyAverage() + " " + currency);
+
+    }
+    
+    public static void viewDailyExpense() {
+        
+        System.out.println("Viewing Daily Expenses");
+        System.out.println("==========");
+
+        int totalDays = 0;
+        float currentTotal = -1;
+        String currentDay = "";
+        String currency = "";
+        for(Expense e : expenses){
+            
+            if(!e.getExpenseDateTime().getDateString().equals(currentDay)){
+                if(currentTotal != -1){
+                    System.out.println(totalDays + ". " + currentDay + " - " + currentTotal + " " + e.getExpenseCurrency());
+                }
+                currentDay = e.getExpenseDateTime().getDateString();
+                currentTotal = 0;
+                currentTotal += e.getExpenseAmount();
+                totalDays += 1;
+            }else{
+
+                currentTotal += e.getExpenseAmount();
+
+            }
+
+            if(currency.isEmpty()){
+                currency = e.getExpenseCurrency();
+            }
+
+        }
+
+        System.out.println(totalDays + ". " + currentDay + " - " + currentTotal + " " + currency);
+
+        System.out.println("Computed Daily Average: " + computeDailyAve() + " " + currency);
+
+    }
+
+    public static void viewTotalCategoryExpense(String category) {
+        
+        int counter = 0;
+        float totalExpense = 0;
+        String currency = "";
+
+        if(category == null){
+
+            System.out.println("Viewing Non-Categorized Expenses");
+            System.out.println("==========");
+
+            for(Expense e : expenses){
+
+                if(e.getExpenseCategory() == null){
+
+                    counter += 1;
+                    totalExpense += e.getExpenseAmount();
+
+                    System.out.println(counter + ". " + e.getExpenseDateTime().getDateString() + " - " + e.getExpenseAmount() + " " + e.getExpenseCurrency());
 
 
+                }
 
-        return 0.0f;
+                if(currency.isEmpty()){
+                    currency = e.getExpenseCurrency();
+                }
+
+            }
+
+            System.err.println("Total Expenses for Non-Categorized: " + totalExpense + " " + currency);
+
+        }else{
+
+            for(Expense e : expenses){
+
+                System.out.println("Viewing  Expenses in the " + category + " Category");
+                System.out.println("==========");
+
+                if(e.getExpenseCategory() != null){
+
+                    if(e.getExpenseCategory().equals(category)){
+
+                        counter += 1;
+                        totalExpense += e.getExpenseAmount();
+    
+                        System.out.println(counter + ". " + e.getExpenseDateTime().getDateString() + " - " + e.getExpenseAmount() + " " + e.getExpenseCurrency());
+    
+                    }
+
+                }
+
+                if(currency.isEmpty()){
+                    currency = e.getExpenseCurrency();
+                }
+
+            }
+
+            System.err.println("Total Expenses for " + category + " Category: " + totalExpense + " " + currency);
+
+        }
+
+    }
+    
+    public static void viewTotalExpense() {
+        
+        int counter = 0;
+        float totalExpense = 0;
+        String currency = "";
+
+        System.out.println("Viewing All Expenses");
+        System.out.println("==========");
+
+        for(Expense e : expenses){
+            
+            counter += 1;
+            totalExpense += e.getExpenseAmount();
+
+            System.out.println(counter + ". " + e.getExpenseDateTime().getDateString() + " - " + e.getExpenseAmount() + " " + e.getExpenseCurrency());
+
+            if(currency.isEmpty()){
+                currency = e.getExpenseCurrency();
+            }
+
+        }
+
+        System.err.println("Total Expenses: " + totalExpense + " " + currency);
+
+    }
+    
+    public static void viewCategoryExpensePercentage() {
+        
+        ArrayList<Float> totalExpenses = new ArrayList<>();
+        String currency = expenses.get(0).getExpenseCurrency();
+
+        for(String category : categories){
+            totalExpenses.add(getTotalCategoryExpense(category));
+        }
+
+        totalExpenses.add(getTotalCategoryExpense(null));
+
+        for(int i = 0; i < categories.size() + 1; i++){
+            
+            float percentage = totalExpenses.get(i)/getTotalExpenses() * 100;
+
+            if(i == categories.size()){
+                System.out.println((i + 1) + ". Non-Categorized - " + totalExpenses.get(i) + " " + currency + " - " + percentage + "%");
+            }else{
+                System.out.println((i + 1) + ". " + categories.get(i) + " - " + totalExpenses.get(i) + " " + currency + " - " + percentage + "%");
+            }
+
+        }
 
     }
 
@@ -271,10 +497,12 @@ public class ExpenseTracker {
 
     }
 
+    //First float will always be the total number of days detected;
     public static ArrayList<Float> getDailyExpenses(){
 
         ArrayList<Float> expensePerDay = new ArrayList<>();
 
+        float totalDays = 0;
         float currentTotal = -1;
         String currentDay = "";
         for(Expense e : expenses){
@@ -286,6 +514,7 @@ public class ExpenseTracker {
                 }
                 currentTotal = 0;
                 currentTotal += e.getExpenseAmount();
+                totalDays += 1;
             }else{
 
                 currentTotal += e.getExpenseAmount();
@@ -294,18 +523,9 @@ public class ExpenseTracker {
 
         }
         expensePerDay.add(currentTotal);
+        expensePerDay.add(0, totalDays);
 
         return expensePerDay;
-
-    }
-
-    public static ArrayList<Float> getWeeklyExpenses(){
-        
-        ArrayList<Float> expensePerWeek = new ArrayList<>();
-
-
-
-        return expensePerWeek;
 
     }
 
@@ -313,9 +533,84 @@ public class ExpenseTracker {
         
         ArrayList<Float> expensePerMonth = new ArrayList<>();
 
+        float totalMonths = 0;
+        float currentTotal = -1;
+        String currentMonth = "";
+        String currentYear = "";
+        for(Expense e : expenses){
+            
+            if(!e.getExpenseDateTime().getMonth().equals(currentMonth) || !e.getExpenseDateTime().getYear().equals(currentYear)){
+                currentMonth = e.getExpenseDateTime().getMonth();
+                currentYear = e.getExpenseDateTime().getYear();
+                if(currentTotal != -1){
+                    expensePerMonth.add(currentTotal);
+                }
+                currentTotal = 0;
+                currentTotal += e.getExpenseAmount();
+                totalMonths += 1;
+            }else{
 
+                currentTotal += e.getExpenseAmount();
+
+            }
+
+        }
+        expensePerMonth.add(currentTotal);
+        expensePerMonth.add(0, totalMonths);
 
         return expensePerMonth;
+
+    }
+
+    public static float getTotalCategoryExpense(String category) {
+        
+        float totalExpense = 0;
+
+        if(category == null){
+
+            for(Expense e : expenses){
+
+                if(e.getExpenseCategory() == null){
+
+                    totalExpense += e.getExpenseAmount();
+
+                }
+
+            }
+
+        }else{
+
+            for(Expense e : expenses){
+
+                if(e.getExpenseCategory() != null){
+
+                    if(e.getExpenseCategory().equals(category)){
+
+                        totalExpense += e.getExpenseAmount();
+    
+                    }
+
+                }
+
+            }
+
+        }
+
+        return totalExpense;
+
+    }
+
+    public static float getTotalExpenses(){
+        
+        float totalExpense = 0;
+
+        for(Expense e : expenses){
+            
+            totalExpense += e.getExpenseAmount();
+
+        }
+
+        return totalExpense;
 
     }
 
@@ -324,42 +619,6 @@ public class ExpenseTracker {
     /*
     
     
-    
-    
-    
-    public float computeWeeklyAve() {
-        
-        return 0.0f;
-    }
-    
-    public float computeMonthlyAve() {
-        
-        return 0.0f;
-    }
-    
-    public void viewMonthlyExpense() {
-        
-    }
-    
-    public void viewDailyExpense() {
-        
-    }
-    
-    public void viewWeeklyExpense() {
-        
-    }
-    
-    public void viewTotalCategoryExpense() {
-        
-    }
-    
-    public void viewTotalExpense() {
-        
-    }
-    
-    public void viewCategoryExpensePercentage() {
-        
-    }
 
     public ArrayList<String> getCategories() {
         return categories;
